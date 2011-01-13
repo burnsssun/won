@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby 
+# -*- mode: Ruby; -*-
+
+$:.unshift File.dirname(__FILE__) + '/../lib'
+
+require 'won/base'
+require 'optparse'
+
+class Application 
+
+  def initialize()
+    super
+  end
+
+  def run 
+    OptionParser.new(&method(:set_opts))
+    @opts.parse!(ARGV)
+
+  end
+  
+
+
+end
+
+
