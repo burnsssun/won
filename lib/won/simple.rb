@@ -122,5 +122,11 @@ module Won
 end
 
 
+include Won::Simple
+
+require "won/helper"
+include Won::Helper
+
+inline true
 
 

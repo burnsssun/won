@@ -4,11 +4,6 @@ $:.unshift File.dirname(__FILE__) + '/../lib'
 require "won/simple"
 include Won::Simple
 
-require "won/helper"
-include Won::Helper
-
-inline true
-
 inline 'main.str'
 
 @a = 3
