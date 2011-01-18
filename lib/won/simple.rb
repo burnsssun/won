@@ -1,4 +1,6 @@
 
+require 'won/version'
+
 module Won
   
   module Simple

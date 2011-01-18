@@ -4,7 +4,7 @@ require "date"
 
 Gem::Specification.new do |s|
   s.name = "won"
-  s.version = IO.read( "lib/won/base.rb" )[ /VERSION = '(.*)'/ ] && $1
+  s.version = IO.read( "lib/won/version.rb" )[ /VERSION = '(.*)'/ ] && $1
   s.date = Date.today.to_s
   s.authors = ["BJ Kim"]
   s.email = ["burnssun@gmail.com"]

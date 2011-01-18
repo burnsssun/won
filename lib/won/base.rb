@@ -1,11 +1,10 @@
 
 require 'tilt'
 require 'fileutils'
+require 'won/version'
 
 module Won
 
-  VERSION = '0.1.1'
-  
   class Base
 
     def initialize
