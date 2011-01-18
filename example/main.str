@@ -6,5 +6,7 @@ int main()
   int #{int_vars * ','};
 }
 
+
 @@ include
 #include "stdio.h"
+

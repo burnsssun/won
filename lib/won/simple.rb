@@ -1,3 +1,4 @@
+
 module Won
   
   module Simple
@@ -29,7 +30,9 @@ module Won
       begin
         io = ::IO.respond_to?(:binread) ? ::IO.binread(file) : ::IO.read(file)
         app, data = io.gsub("\r\n", "\n").split(/^__END__$/, 2)
-        data = app unless data
+        unless data
+          data,app = app,data
+        end
       rescue Errno::ENOENT
         raise "Template not found: #{file}"
       end
@@ -67,26 +70,55 @@ module Won
           end
         end
       when Proc,String
-        body = data.is_a?(String) ? Proc.new { data } : data
+        body = data.is_a?(String) ? data : data.call
         path, line = self.class.caller_locations.first
       else
-        raise ArgumentError
+        class_name = data.class.to_s
+        candidate = data[:view] if !candidate && data.respond_to?(:has_key?) && data.has_key?(:view)
+        candidate = [class_name.to_sym, class_name.downcase.to_sym].detect  { |x| @templates.has_key?(x) } unless candidate
+        raise ArgumentError unless @templates.has_key?(candidate)
+        scope = data
+        body, path, line = @templates[candidate]
       end
-      
+
+      line = line.to_i
+      compiled = "%Q{#{body}}"
       unless scope
-        TOPLEVEL_BINDING.eval "%Q{#{body}}", path, line
+        out = TOPLEVEL_BINDING.eval compiled, path, line
       else
-        scope.instance_eval "%Q{#{body}}", path, line
+        case scope
+        when Binding
+          out = scope.eval(compiled , path, line )
+        else
+          scope.extend Hook
+          out = scope.instance_eval(compiled, path, line)
+        end
+      end # unless
+      out.chomp
+    end # str
+
+    def template name
+      if block_given?
+        path, line = self.class.caller_locations.first
+        @templates[name.to_sym] = yield, path, line
       end
-      
     end
 
+  end # Simple
+  
+  module Hook
+    def method_missing(method, *args, &block)
+      if self.respond_to?(:has_key?) && self.has_key?(method)
+        self[method]
+      else
+        path, line = self.class.caller_locations.first
+        raise "#{path}:#{line} in '#{method}' not found"
+      end
+    end
   end
   
 end
 
-include Won::Simple
 
-inline true
 
 

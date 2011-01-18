@@ -4,13 +4,26 @@ require "won"
 
 inline "main.str"
 
-p str :packet_list
+@a = 3
+puts str_obj self, :local_variables, :parent => self
 
-file './generated/temp.c' do
-  str :main, :int_vars => [ 'a', 'b']
+puts str :local_variables, :parent => self
+
+file 'temp' do
+  @a = 3
+  puts str :local_variables, :parent => self
 end
+
+# file './generated/temp.c' do
+#   str :main, :int_vars => [ 'a', 'b']
+# end
 
 __END__
 
-@@ packet_list
-=== this is packet_list ===
+@@ local_variables
+============================
+#{local_variables.join(',')}
+self:   #{self}
+parent: #{parent}
+a: #{@a}
+============================
