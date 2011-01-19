@@ -2,11 +2,10 @@
 
 $:.unshift File.dirname(__FILE__) + '/../lib'
 require "won/simple"
-include Won::Simple
 
 inline 'main.str'
 
-@a = 3
+@a = 'this is no 3"
 
 # File.open( 'test.tmp', 'w' ) do |f|
 #   local_var = 'local!!!'
