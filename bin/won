@@ -7,7 +7,7 @@ require 'won'
 require 'optparse'
 
 job = ARGV.shift
-job += '.rb' unless job.end_with?('.rb')
+job += '.won' unless job.end_with?('.won')
 job_path = won_search_path( job )
 
 inline job_path
