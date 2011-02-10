@@ -76,7 +76,7 @@ module Won
         if body
           body = body.call if body.respond_to?(:call)
         else
-          path = won_search_path( "#{data}.#{engine}" )
+          path = won_search_path( "#{data}.str" )
           begin
             body = IO.read( path )
             @templates[data] = [body,path,1]
@@ -109,7 +109,7 @@ module Won
           out = scope.instance_eval(compiled, path, line)
         end
       end # unless
-      out.chomp
+      out
     end # render
 
     def str data, scope = nil
@@ -127,8 +127,8 @@ module Won
         # start = "<<" + "'" + heredoc + "'" + "\n"
         start = %Q{<<'#{heredoc}'\n}
         endd = %Q{#{heredoc}\n_out_.chomp!\n}
-        temp.gsub!(/\{\{(.*?)\}\}/m, "\n#{endd}_out_+=(\\1).to_s\n_out_+= #{start}")
-        %Q{_out_ = ''\n_out_+=#{start}#{temp}#{endd}}
+        temp.gsub!(/\{\{(.*?)\}\}/m, "\n#{heredoc}\n_out_.chomp!\n_out_+=(\\1).to_s\n_out_+= #{start}")
+        %Q{_out_ = ''\n_out_+=#{start}#{temp}#{heredoc}\n}
       end
     end 
 

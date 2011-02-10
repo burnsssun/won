@@ -4,7 +4,7 @@ module Won
 
   module Helper
   
-    def file *args
+    def _file mode, *args
       engine = :str
       template = nil
       path = nil
@@ -29,7 +29,15 @@ module Won
       raise "can not render: template missing? " unless out
       fullpath = File.expand_path(path) 
       ::FileUtils.mkdir_p File.dirname( fullpath )
-      File.open( fullpath, "w" ) { |f| f.write( out ) }
+      File.open( fullpath, mode ) { |f| f.write( out ) }
+    end
+
+    def file *args, &blk
+      _file 'w', *args, &blk
+    end
+
+    def append *args, &blk
+      _file 'a', *args, &blk
     end
 
   end
