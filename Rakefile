@@ -19,6 +19,9 @@ task :up do
   end
 end
 
+task :gem do
+  sh "gem build won.gemspec"
+end
 
 CLEAN.include %w[
   **/.*.sw?

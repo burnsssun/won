@@ -1,70 +1,17 @@
 #!/usr/bin/env ruby 
-# -*- mode: Ruby; -*-
 
 $:.unshift File.dirname(__FILE__) + '/../lib'
 
-require 'won/version'
+
+require 'won'
 require 'optparse'
 
-builtin_job_dir = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'jobs'))
+job = ARGV.shift
+job += '.rb' unless job.end_with?('.rb')
+job_path = won_search_path( job )
 
-@job_path = [ './', './.won/jobs', '~/.won/jobs', '/usr/share/lib/won/jobs', '/usr/local/share/won/jobs', builtin_job_dir ]
+inline job_path
+load job_path
 
-def job_path( job )
-  job += '.rb' unless job.end_with?('.rb')
-  path = @job_path.map { |e| File.join(e,job) }.detect { |x| File.exist?(x) }
-  File.absolute_path( path ) if path
-end
-
-@options = {}
-optparse = OptionParser.new() do |opts|
-
-  opts.banner =<<-BANNER
-won-#{Won::VERSION}
-usage: won [options] job1 job2 ...
-BANNER
-
-  opts.version = #{Won::VERSION}
-
-  @options[:verbose] = false
-  opts.on( '-v', '--verbose', 'output more information' ) do
-    @options[:verbose] = true
-  end
-  
-  @options[:outputdir] = nil
-  opts.on( '-o', '--outputdir DIRECTORY', 'assign output directory' ) do |file|
-    opts.warn "-o not implemented"
-    @options[:outputdir] = file
-  end
-  
-  opts.on( '-h', '--help', 'display this screen' ) do
-    puts opts
-    exit
-  end  
-  
-end
-
-optparse.parse!
-
-if ARGV.size == 0
-  puts optparse
-  exit
-end
-
-
-def info msg
-  puts msg if @options[:verbose]
-end
-
-
-ARGV.each do |job|
-  job_path = job_path( job )
-  info "#{job_path}..."
-  if job_path
-    puts `ruby #{job_path}` 
-  else
-    puts "#{job} not found"
-  end
-end
-
+# -*- mode: Ruby; -*-
 

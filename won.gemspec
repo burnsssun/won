@@ -16,12 +16,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = s.name
 
-  s.files = `git ls-files -- lib/* bin/* LICENSE README.md`.split("\n")
+  s.files = `git ls-files -- lib/* bin/* jobs/* LICENSE README.md`.split("\n")
   s.default_executable = 'won'
   s.executables = ['won']
   s.require_paths = ["lib"]
-
-  s.add_runtime_dependency(%q<tilt>, ["~> 1.1"])
 
   s.add_development_dependency(%q<rake>, [">= 0.8.7"])
   s.add_development_dependency(%q<minitest>, [">= 0"])
