@@ -1,5 +1,3 @@
-
-
 begin; require 'rubygems'; rescue LoadError; end
 
 require 'rake'
@@ -20,7 +18,9 @@ task :up do
 end
 
 task :gem do
-  sh "gem build won.gemspec"
+  output = `gem build won.gemspec`
+  p output[ /File: ([^\s]*)/ ]
+  sh "gem install  #{$1}"
 end
 
 CLEAN.include %w[

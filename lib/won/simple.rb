@@ -1,5 +1,6 @@
 
 require 'won/version'
+require 'pathname'
 
 module Won
   
@@ -28,13 +29,13 @@ module Won
 
     def won_search_path( file )
       path = nil
-      if File.exist?(file) # file is full path like '/my/cool/job/test.won'
-        path = file 
-      else
-        builtin_dir = File.absolute_path(File.join(File.dirname(__FILE__), '..', '..', 'jobs'))
-        file_path = [ './', './.won', './won', '~/.won', builtin_dir ]
-        path = file_path.map { |e| File.join(e,file) }.detect { |x| File.exist?(x) }
+      return file if File.exist?(file) # file is full path like '/my/cool/job/test.won'
+      paths = []
+      Pathname.new('.').realpath.ascend do |path|
+        paths << (path + 'won').to_s
       end
+      paths.concat( [ '~/.won', File.absolute_path(File.join(File.dirname(__FILE__), '..', '..', 'won')) ] )
+      path = paths.map { |e| File.join(e,file) }.detect { |x| File.exist?(x) }
       File.absolute_path( path ) if path
     end
 

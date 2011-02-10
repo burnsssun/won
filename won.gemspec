@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = s.name
 
-  s.files = `git ls-files -- lib/* bin/* jobs/* LICENSE README.md`.split("\n")
+  s.files = `git ls-files -- lib/* bin/* won/* LICENSE README.md`.split("\n")
   s.default_executable = 'won'
   s.executables = ['won']
   s.require_paths = ["lib"]
