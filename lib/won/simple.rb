@@ -32,6 +32,7 @@ module Won
       return file if File.exist?(file) # file is full path like '/my/cool/job/test.won'
       paths = []
       Pathname.new('.').realpath.ascend do |path|
+        paths << path.to_s
         paths << (path + 'won').to_s
       end
       paths.concat( [ '~/.won', File.absolute_path(File.join(File.dirname(__FILE__), '..', '..', 'won')) ] )

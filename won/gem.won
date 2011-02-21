@@ -11,11 +11,15 @@ file :mu, "#@project.gemspec", :gemspec
 
 file :mu, "./lib/#@project.rb", :libprj
 
-file :mu, "./lib/#@project/version.rb", :version
-
 file 'LICENSE'
 
+file '.gitignore'
 
+file :mu, 'README.md'
+
+`git init`
+
+`git add ** .gitignore`
 
 __END__
 
@@ -31,7 +35,7 @@ require 'date'
 task :default => [:gem]
 
 task :up do
-  ver_file = "lib/{{ @project }}/version.rb"
+  ver_file = "lib/{{ @project }}.rb"
   orig = IO.read( ver_file  )
   if orig[ /VERSION = '(.*)'/ ] && $1
     new_ver = $1.succ
@@ -41,7 +45,9 @@ task :up do
 end
 
 task :gem do
-  sh "gem build {{ @project }}.gemspec"
+  output = `gem build {{ @project }}.gemspec`
+  p output[ /File: ([^\s]*)/ ]
+  sh "gem install  #{$1}"
 end
 
 CLEAN.include %w[
@@ -65,7 +71,7 @@ require "date"
 
 Gem::Specification.new do |s|
   s.name = '{{ @project }}'
-  s.version = IO.read( "lib/{{ @project }}/version.rb" )[ /VERSION = '(.*)'/ ] && $1
+  s.version = IO.read( "lib/{{ @project }}.rb" )[ /VERSION = '(.*)'/ ] && $1
   s.date = Date.today.to_s
   s.authors = [`git config --global --get user.name`]
   s.email = [`git config --global --get user.email`]
@@ -88,16 +94,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<yard>, [">= 0"])
 end
 
-
-
 @@ libprj
 
 libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
-require '{{ @project }}/version'
-
-@@ version
 module {{ @project.capitalize }}
 
   VERSION = '0.0.0'
@@ -128,4 +129,62 @@ end
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+
+@@ README.md
+
+# {{ @project }}
+{{ @project }} is a 
+
+## Install
+
+Install {{ @project.capitalize }} as a gem:
+
+  gem install {{ @project }}
+
+## Usage
+
+@@ .gitignore
+
+# editor backup  #
+##################
+*.bak
+*~
+.\#*
+
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.gem
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
 

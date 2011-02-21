@@ -1,5 +1,5 @@
 
-@opts = ARGV.getopts("hv")
+@opts = ARGV.getopts("v")
 include FileUtils::Verbose if @opts['v']
 
 @name = ARGV[0]
@@ -8,7 +8,7 @@ raise "name needed" unless @name
 file "#@name.won", :won
 
 append "#@name.won" do
-  mu <<TMPL
+  mu <<'TMPL'
 @@ hello
 #@project says 'hello'
 TMPL
@@ -18,7 +18,7 @@ __END__
 
 @@ won
 
-@opts = ARGV.getopts("hv")
+@opts = ARGV.getopts("v")
 include FileUtils::Verbose if @opts['v']
 
 @project = ARGV[0]
@@ -28,4 +28,6 @@ mkdir_p @project
 cd @project
 
 file "hello.txt", :hello
+
+__END__
 
