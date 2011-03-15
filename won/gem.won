@@ -25,9 +25,6 @@ __END__
 
 @@ Rakefile
 
-begin; require 'rubygems'; rescue LoadError; end
-
-require 'rake'
 require 'rake/clean'
 require 'time'
 require 'date'
