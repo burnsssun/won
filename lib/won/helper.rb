@@ -3,7 +3,14 @@ require 'fileutils'
 module Won
 
   module Helper
-  
+
+    def partial collection, &block
+      collection.map { |x| yield(x) }.join("\n")
+    end
+
+    alias p! :partial
+    alias :b! :binding
+
     def _file mode, *args
       engine = :str
       template = nil
