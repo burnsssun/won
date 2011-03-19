@@ -86,7 +86,7 @@ module Won
           end
         end
       when Proc,String
-        body = data.is_a?(String) ? data : data.call
+        body = data.is_a?(String) ? data : data.call(scope)
         path, line = self.class.caller_locations.first
       else
         class_name = data.class.to_s
